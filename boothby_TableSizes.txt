@@ -1,0 +1,3 @@
+After you insert all your data, retrieve the number of tuples in each of your tables and copy/paste that
+information into a text file. (Simply run the query “SELECT COUNT(*) FROM tablename” for
+each table in your database.) 

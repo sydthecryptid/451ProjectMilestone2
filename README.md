@@ -1,27 +1,18 @@
-## Project Milestone 1
+## Project Milestone 2 - (NOT DONE) Sydnee Boothby CPTS 451 06/03
 
-Homework documentation in separate file
-JSON files are not included here (too large to be committed), but are in canvas
+Homework documentation in separate file, 
+JSON files are not included in github (too large to be committed), but are in canvas
 
-Terminal Steps:
+### Terminal Commands to Run:
 
-Part 2 (ermodeldb)
-- Create DB "sudo -u postgres createdb ermodeldb"
-- Grant privledges to user: "sudo -u postgres psql -d ermodeldb -c "GRANT ALL PRIVILEGES ON SCHEMA public TO username;"
-- Create tables from sql file "psql -d ermodeldb -f ~/filepath/.sql" 
-- View tables: psql -d ermodeldb -c "\dt"
-- View individual schema: "psql -d ermodeldb -c "\d SchemaName"
-- db reset built in to sql code 
-- Delete db: sudo -u postgres dropdb milestone1db
+psql -U sydnee -d postgres : get psql running
+psql -U sydnee -d postgres -c "CREATE DATABASE yelpdb;" : create db
+sudo -u postgres psql -c "CREATE DATABASE yelpdb OWNER sydnee;" : if ownership issues 
 
-Part 3
-- psql -d milestone1db
-- Copy from csv: \copy Business (name,state,city) FROM '~/cpts451/ProjectMilestone1/milestone1DB.csv' DELIMITER ',' CSV QUOTE '"' 
-- View table: "\dt"
-- View entries in db: "SELECT * FROM Business LIMIT X;"
-- Exit psql: \q
+psql -U sydnee -d yelpdb -f boothby_relations_v2.sql : run sql file to create tables
+python parseAndInsert_Sample.py : run python file to import data from JSONS
+psql -U sydnee -d yelpdb -f boothby_relations_v2.sql : clear tables from previous runs
 
--Run python commands: (after installing PyQt6)
-- source .venv/bin/activate
-- run designer gui: QT_QPA_PLATFORM=xcb designer &
-- run app to display csv queries: python milestone1.py
+### To Be Completed:
+- debug python file (bugs with user and review data ip)
+- written explanation of business popularity  

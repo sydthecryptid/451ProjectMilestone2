@@ -2,5 +2,11 @@
 ProjectMilestone1/yelp_review.JSON
 ProjectMilestone1/yelp_user.JSON
 .venv/
+venv/
 .venvyelp_review.JSON
 yelp_user.JSON
+*.JSON
+*.json
+__pycache__/
+*.pyc
+.DS_Store
