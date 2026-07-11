@@ -1,3 +1,52 @@
-After you insert all your data, retrieve the number of tuples in each of your tables and copy/paste that
-information into a text file. (Simply run the query “SELECT COUNT(*) FROM tablename” for
-each table in your database.) 
+command: 
+
+psql -U sydnee -d yelpdb -c "SELECT COUNT(*) FROM zipcode;"
+psql -U sydnee -d yelpdb -c "SELECT COUNT(*) FROM address;"
+psql -U sydnee -d yelpdb -c "SELECT COUNT(*) FROM business;"
+psql -U sydnee -d yelpdb -c "SELECT COUNT(*) FROM \"user\";"
+psql -U sydnee -d yelpdb -c "SELECT COUNT(*) FROM review;"
+psql -U sydnee -d yelpdb -c "SELECT COUNT(*) FROM category;"
+psql -U sydnee -d yelpdb -c "SELECT COUNT(*) FROM business_category;"
+psql -U sydnee -d yelpdb -c "SELECT COUNT(*) FROM checkin;"
+
+results:
+
+ count 
+-------
+   206
+(1 row)
+
+ count 
+-------
+ 22000
+(1 row)
+
+ count 
+-------
+ 11000
+(1 row)
+
+ count  
+--------
+ 192999
+(1 row)
+
+ count  
+--------
+ 201599
+(1 row)
+
+ count 
+-------
+   226
+(1 row)
+
+ count 
+-------
+     0
+(1 row)
+
+ count  
+--------
+ 302865
+(1 row)

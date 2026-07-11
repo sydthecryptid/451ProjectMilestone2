@@ -1,9 +1,36 @@
-(6%) Calculate and update the “numCheckins”, “reviewcount”, and “reviewrating” attributes for each
-business.
- “numCheckins” value for a business should be updated to the sum of all check-in counts for that
-business. Similarly, “reviewcount” should be updated to the number of reviews provided for that
-business (Note that you will overwrite the values extracted from the JSON data). “reviewrating” is
-the average of the review star ratings provided for each business. You should query the review table
-to calculate the number of reviews and avg review rating for each business. Similarly, you should
-query the check-in table to calculate the total number of check-ins. In grading, points will be
-deducted if you don’t update these values.
+--run w: psql -U sydnee -d yelpdb -f boothby_UPDATE.sql
+
+--first store total checkins for each business, store in temp for now
+CREATE TEMP TABLE checkin_stats AS
+SELECT businessID, SUM(frequency) AS total_checkins
+FROM Checkin
+GROUP BY businessID;
+
+UPDATE business b --update business totals where id matches temp
+SET totalCheckins = cs.total_checkins --my table uses totalCheckins name 
+FROM checkin_stats cs
+WHERE b.businessID = cs.businessID;
+
+
+-- review count, similar logic to total checkins
+CREATE TEMP TABLE reviewcount_stats AS
+SELECT businessID, COUNT(*) AS review_count 
+FROM Review
+GROUP BY businessID;
+
+UPDATE business b --update table where id matches
+SET reviewCount = rc.review_count
+FROM reviewcount_stats rc
+WHERE b.businessID = rc.businessID;
+
+--determine avverage review rating for each business
+CREATE TEMP TABLE reviewrating_stats AS
+SELECT businessID, AVG(stars) AS avg_review_rating --take average of stars for each busid
+FROM Review
+GROUP BY businessID;
+
+UPDATE business b
+SET averageReviewRating = rr.avg_review_rating
+FROM reviewrating_stats rr
+WHERE b.businessID = rr.businessID;
+
