@@ -110,9 +110,8 @@ def insert2BusinessTable(path):
                     continue
                 try:
                     insertBusinessAndCategories(cur, data)
-                    count+=1
-                    if count % COMMIT_BATCH_SIZE == 0:
-                        conn.commit()
+                    conn.commit() #fixed to commit for each successful insert
+                    count+=1 #increment count for each insert
                 except Exception as e:
                     conn.rollback()
                     print(f"Error inserting line {count}:with open(path, 'r') as f: {e}")
@@ -140,14 +139,12 @@ def parseUser(path):
                     'INSERT INTO "user" (userID, reviewCount) VALUES (%s, %s) ON CONFLICT (userID) DO NOTHING',
                     (data["user_id"], data.get("review_count", 0)),
                 )
+                
+                conn.commit()
                 count += 1
-                if count % COMMIT_BATCH_SIZE == 0:
-                    conn.commit()
-                    print(f"...{count} users inserted")
             except Exception as e:
                 conn.rollback()
                 print(f"User insert failed for {data.get('user_id')}: {e}")
-    conn.commit()
     cur.close()
     conn.close()
     print(f"Inserted: {count} users")
@@ -168,10 +165,9 @@ def parseReview(path):
                     "VALUES (%s, %s, %s, %s) ON CONFLICT DO NOTHING",
                     (data["review_id"], data["user_id"], data["stars"], data["business_id"]),
                 )
+                conn.commit()
                 count += 1
-                if count % COMMIT_BATCH_SIZE == 0:
-                    conn.commit()
-                    print(f"{count} reviews inserted")
+
             except Exception as e:
                 conn.rollback()
                 print(f"Review insert failed")
@@ -201,15 +197,12 @@ def parseCheckIn(path):
                             'INSERT INTO CheckIn (businessID, day, time, frequency) VALUES (%s, %s, %s, %s) ON CONFLICT DO NOTHING',
                             (business_id, day, t, frequency),
                         )
+                        conn.commit()
                         count += 1
-                        if count % COMMIT_BATCH_SIZE == 0:
-                            conn.commit()
-                            print(f"{count} check-ins inserted")
                     except Exception as e:
                         conn.rollback()
                         print(f"Check-in insert failed for {business_id} on {day} at {t}: {e}")
 
-    conn.commit()
     cur.close()
     conn.close()
     print(f"Inserted: {count} check-ins")
@@ -235,14 +228,12 @@ def parseZipcodes(path):
                         "INSERT INTO Zipcode (zipcode, population, averageIncome) VALUES (%s, %s, %s) ON CONFLICT DO NOTHING",
                         (zipcode, 0, 0.0),  # Default values since JSON doesn't have this data
                     )
+                    conn.commit()
                     count += 1
-                    if count % COMMIT_BATCH_SIZE == 0:
-                        conn.commit()
                 except Exception as e:
                     conn.rollback()
                     print(f"Zipcode insert failed for {zipcode}: {e}")
-    
-    conn.commit()
+
     cur.close()
     conn.close()
     print(f"Inserted: {count} zipcodes") 

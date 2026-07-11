@@ -18,12 +18,12 @@ results:
 
  count 
 -------
- 22000
+ 33962
 (1 row)
 
  count 
 -------
- 11000
+ 11481
 (1 row)
 
  count  
@@ -33,7 +33,7 @@ results:
 
  count  
 --------
- 201599
+ 416479
 (1 row)
 
  count 
@@ -48,5 +48,5 @@ results:
 
  count  
 --------
- 302865
+ 481360
 (1 row)
