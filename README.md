@@ -12,6 +12,7 @@ sudo -u postgres psql -c "CREATE DATABASE yelpdb OWNER sydnee;" : if ownership i
 psql -U sydnee -d yelpdb -f boothby_relations_v2.sql : run sql file to create tables
 python parseAndInsert_Sample.py : run python file to import data from JSONS
 
+
+
 ### To Be Completed:
-- debug python file (bugs with user and review data ip)
-- written explanation of business popularity  
+-user interface portion

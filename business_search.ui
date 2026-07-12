@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>businessSearch</class>
+ <widget class="QWidget" name="businessSearch">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1000</width>
+    <height>678</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QTableWidget" name="resultsTable">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>170</y>
+     <width>601</width>
+     <height>211</height>
+    </rect>
+   </property>
+   <property name="columnCount">
+    <number>12</number>
+   </property>
+   <column>
+    <property name="text">
+     <string>Business Name</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Address</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>City</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Stars</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Review Count</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Checkins</string>
+    </property>
+   </column>
+   <column/>
+   <column/>
+   <column/>
+   <column/>
+   <column/>
+   <column/>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>9</x>
+     <y>9</y>
+     <width>781</width>
+     <height>111</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QGroupBox" name="groupBox">
+      <property name="title">
+       <string>State</string>
+      </property>
+      <widget class="QComboBox" name="stateCombo">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>30</y>
+         <width>241</width>
+         <height>31</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="QGroupBox" name="groupBox_2">
+      <property name="title">
+       <string>City</string>
+      </property>
+      <widget class="QListWidget" name="cityList">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>20</y>
+         <width>81</width>
+         <height>51</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="QGroupBox" name="groupBox_3">
+      <property name="title">
+       <string>Zipcode</string>
+      </property>
+      <widget class="QListWidget" name="zipcodeList">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>20</y>
+         <width>121</width>
+         <height>61</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="QGroupBox" name="groupBox_4">
+      <property name="title">
+       <string>Category</string>
+      </property>
+      <widget class="QListWidget" name="categoryList">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>20</y>
+         <width>121</width>
+         <height>61</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>130</y>
+     <width>243</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <item>
+     <widget class="QPushButton" name="searchButton">
+      <property name="text">
+       <string>Search Businesses</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="clearCategoryButton">
+      <property name="text">
+       <string>Clear Category Filter</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
