@@ -1,3 +1,5 @@
+#taken from sample code, updated to include all tables
+
 import json
 import psycopg2
 

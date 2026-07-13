@@ -1,5 +1,5 @@
 -- adapted from canvas starter code and milestone 1
--- used ai a little to identify bugs and troubleshoot code
+-- ai used when needed to identify bugs and troubleshoot code
 
 --to reset db, use cascade to drop dependencies
 DROP TABLE IF EXISTS BusinessCategory CASCADE;

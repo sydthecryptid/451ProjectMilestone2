@@ -16,7 +16,7 @@ AFTER INSERT ON Review
 FOR EACH ROW
 EXECUTE FUNCTION updateBusinessReviewStats();
 
---below is commands used to test trigger: 
+--below is commands used to test: 
 /* 
 SELECT userid FROM "user" LIMIT 1;
 SELECT businessid, reviewcount, averagereviewrating FROM business LIMIT 1;
