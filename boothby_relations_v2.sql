@@ -76,3 +76,21 @@ CREATE TABLE CheckIn (
     PRIMARY KEY (businessID, day, time), --weak entity so use composite for primary key
     FOREIGN KEY (businessID) REFERENCES Business(businessID)
 );
+
+
+
+---- query to determine if a business is popular 
+SELECT businessID, totalCheckins, reviewCount, averageReviewRating,
+    CASE 
+        WHEN totalCheckins > 1000 AND reviewCount > 100 THEN 'Popular'
+        ELSE 'Not Popular'
+    END AS popularityStatus
+FROM Business;
+
+--- query to determine if a business is successful (just add on avg rating)
+SELECT popularityStatus, averageReviewRating,
+    CASE 
+        WHEN popularityStatus = 'Popular' AND averageReviewRating >= 4.0 THEN 'Successful'
+        ELSE 'Not Successful'
+    END AS successStatus
+FROM Business;

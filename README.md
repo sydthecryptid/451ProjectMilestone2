@@ -26,7 +26,11 @@ psql -U sydnee -d yelpdb -f boothby_TRIGGERS.sql\
 python business_search_App.py: run app demo\
 
 
-### To Be Completed:
+### In Progress:
+-Add queries for business popularity + success (add ui buttons)
+
+
+
 -more test cases + find bugs
 -fix naming conventions of functions/files (current ver works, but is messy)
 
