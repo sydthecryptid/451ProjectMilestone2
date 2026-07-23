@@ -241,6 +241,37 @@ def parseZipcodes(path):
     print(f"Inserted: {count} zipcodes") 
 
 
+
+def update_zipcode_business_counts(conn):
+    with conn.cursor() as cur:
+        cur.execute( #group businesses by zipcode and update count column 
+            """
+            UPDATE Zipcode z
+            SET businessCount = COALESCE(sub.business_count, 0) 
+            FROM (
+                SELECT a.zipcode, COUNT(*) AS business_count
+                FROM Business b
+                JOIN Address a ON b.addressID = a.addressID
+                GROUP BY a.zipcode
+            ) sub
+            WHERE z.zipcode = sub.zipcode;
+            """
+        )
+        cur.execute( #if business count is 0
+            """
+            UPDATE Zipcode z
+            SET businessCount = 0
+            WHERE NOT EXISTS (
+                SELECT 1
+                FROM Address a
+                JOIN Business b ON b.addressID = a.addressID
+                WHERE a.zipcode = z.zipcode
+            );
+            """
+        )
+        conn.commit()
+
+
 conn = get_conn()
 disable_fk_constraints(conn) #prevent foreign key constraint violations
 conn.close()
@@ -248,6 +279,11 @@ conn.close()
 #insertion into tables in order of dependencies
 parseZipcodes("./yelp_business.JSON")
 insert2BusinessTable("./yelp_business.JSON")
+
+conn = get_conn()
+update_zipcode_business_counts(conn)
+conn.close()
+
 parseUser("./yelp_user.JSON")
 parseReview("./yelp_review.JSON")
 parseCheckIn("./yelp_checkin.JSON")

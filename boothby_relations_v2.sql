@@ -1,4 +1,3 @@
--- adapted from canvas starter code and milestone 1
 -- ai used when needed to identify bugs and troubleshoot code
 
 --to reset db, use cascade to drop dependencies
@@ -16,7 +15,8 @@ DROP TABLE IF EXISTS Zipcode CASCADE;
 CREATE TABLE Zipcode (
     zipcode VARCHAR(5) PRIMARY KEY,
     population INT NOT NULL,
-    averageIncome NUMERIC(10,2) NOT NULL
+    averageIncome NUMERIC(10,2) NOT NULL,
+    businessCount INT NOT NULL DEFAULT 0
 );
 
 create table Address(
@@ -35,6 +35,11 @@ create table Business (
     reviewCount INT DEFAULT 0,
     totalCheckins INT DEFAULT 0, --calculated from each checkin
     averageReviewRating NUMERIC(2,1) DEFAULT 0.0, --calculated from each review
+
+    --add popularity and success metrics for ms3
+    popularityStatus BOOLEAN DEFAULT FALSE, --calculated from checkins and reviews
+    successStatus BOOLEAN DEFAULT FALSE, --calculated from popularity and average review rating
+
     addressID INT NOT NULL, --derived from address
 
     FOREIGN KEY (addressID) REFERENCES Address(addressID)
@@ -77,20 +82,19 @@ CREATE TABLE CheckIn (
     FOREIGN KEY (businessID) REFERENCES Business(businessID)
 );
 
+---- query to determine if a business is popular, follows classificationMetrics.pdf
 
-
----- query to determine if a business is popular 
 SELECT businessID, totalCheckins, reviewCount, averageReviewRating,
     CASE 
-        WHEN totalCheckins > 1000 AND reviewCount > 100 THEN 'Popular'
-        ELSE 'Not Popular'
+        WHEN totalCheckins > 1000 AND reviewCount > 100 THEN TRUE
+        ELSE FALSE
     END AS popularityStatus
 FROM Business;
 
 --- query to determine if a business is successful (just add on avg rating)
 SELECT popularityStatus, averageReviewRating,
     CASE 
-        WHEN popularityStatus = 'Popular' AND averageReviewRating >= 4.0 THEN 'Successful'
-        ELSE 'Not Successful'
+        WHEN popularityStatus = 'Popular' AND averageReviewRating >= 4.0 THEN TRUE
+        ELSE FALSE
     END AS successStatus
 FROM Business;
