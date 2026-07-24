@@ -34,3 +34,17 @@ SET averageReviewRating = rr.avg_review_rating
 FROM reviewrating_stats rr
 WHERE b.businessID = rr.businessID;
 
+-- classify popularity based on checkins and review count
+UPDATE business
+SET popularityStatus = CASE
+    WHEN totalCheckins > 100 AND reviewCount > 50 THEN TRUE
+    ELSE FALSE
+END;
+
+-- classify success based on popularity and average rating
+UPDATE business
+SET successStatus = CASE
+    WHEN popularityStatus = TRUE AND averageReviewRating >= 4.0 THEN TRUE
+    ELSE FALSE
+END;
+

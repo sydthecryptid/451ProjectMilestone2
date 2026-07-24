@@ -3,7 +3,10 @@
 
 # business search app prototype, connects to .ui file
 # run with: python business_search_App.py
-# edit ui with command: QT_QPA_PLATFORM=xcb venv/lib/python3.12/site-packages/qt6_applications/Qt/bin/designer business_search.ui
+
+# edit ui with command: QT_QPA_PLATFORM=xcb .venv/lib/python3.12/site-packages/qt6_applications/Qt/bin/designer business_search.ui
+# use command to find designer: find .venv -iname "*designer*" -type f -executable
+
 
 import sys
 import psycopg2
@@ -33,6 +36,7 @@ class BusinessSearchApp(QWidget):
         uic.loadUi("business_search.ui", self)
  
         self.selected_category = None
+        self._configure_tables()
  
         # connect ui elements to query functions
         self.stateCombo.currentTextChanged.connect(self.on_state_selected)
@@ -41,8 +45,40 @@ class BusinessSearchApp(QWidget):
         self.categoryList.currentTextChanged.connect(self.on_category_selected)
         self.searchButton.clicked.connect(self.search_businesses)
         self.clearCategoryButton.clicked.connect(self.clear_category_filter)
- 
+        self.pushButton.clicked.connect(self.refresh_results)
+    
         self.load_states()
+
+    def _configure_tables(self):
+        self.resultsTable.setColumnCount(6)
+        self.resultsTable.setHorizontalHeaderLabels(
+            ["Business Name", "Address", "City", "Stars", "Review Count", "Checkins"]
+        )
+
+        self.zipcodeResults.setColumnCount(2)
+        self.zipcodeResults.setHorizontalHeaderLabels(["Metric", "Value"])
+
+        self.popularResults.setColumnCount(3)
+        self.popularResults.setHorizontalHeaderLabels(
+            ["Business Name", "Total Check-Ins", "Review Count"]
+        )
+
+        self.successfulResults.setColumnCount(2)
+        self.successfulResults.setHorizontalHeaderLabels(["Business Name", "Rating"])
+
+    def _clear_results(self, table):
+        table.setRowCount(0)
+
+    def _populate_table(self, table, rows):
+        table.setRowCount(len(rows))
+        for row_idx, row_data in enumerate(rows):
+            for col_idx, value in enumerate(row_data):
+                table.setItem(row_idx, col_idx, QTableWidgetItem(str(value)))
+        table.resizeColumnsToContents()
+
+    def _selected_zipcode(self):
+        zipcode_item = self.zipcodeList.currentItem()
+        return zipcode_item.text() if zipcode_item else None
 
     def set_status(self, text): #for debugging, set status label or print to console
 
@@ -66,7 +102,10 @@ class BusinessSearchApp(QWidget):
         self.cityList.clear() #clear previous selections before new
         self.zipcodeList.clear()
         self.categoryList.clear()
-        self.resultsTable.setRowCount(0)
+        self._clear_results(self.resultsTable)
+        self._clear_results(self.popularResults)
+        self._clear_results(self.successfulResults)
+        self._clear_results(self.zipcodeResults)
  
         if not state:
             return
@@ -83,7 +122,10 @@ class BusinessSearchApp(QWidget):
     def on_city_selected(self, city):
         self.zipcodeList.clear()
         self.categoryList.clear()
-        self.resultsTable.setRowCount(0)
+        self._clear_results(self.resultsTable)
+        self._clear_results(self.popularResults)
+        self._clear_results(self.successfulResults)
+        self._clear_results(self.zipcodeResults)
  
         if not city:
             return
@@ -100,7 +142,10 @@ class BusinessSearchApp(QWidget):
     # get all business categories for zipcode chosen
     def on_zip_selected(self, zipcode):
         self.categoryList.clear()
-        self.resultsTable.setRowCount(0)
+        self._clear_results(self.resultsTable)
+        self._clear_results(self.popularResults)
+        self._clear_results(self.successfulResults)
+        self._clear_results(self.zipcodeResults)
         self.selected_category = None
  
         if not zipcode:
@@ -120,6 +165,7 @@ class BusinessSearchApp(QWidget):
         for (cat,) in rows:
             self.categoryList.addItem(cat)
         self.set_status(f"Loaded {len(rows)} categories for zipcode {zipcode}.")
+        self.refresh_results()
  
     def on_category_selected(self, category):
         self.selected_category = category if category else None
@@ -131,11 +177,10 @@ class BusinessSearchApp(QWidget):
  
     # search businesses based on zipcode and category (opt)
     def search_businesses(self):
-        zip_item = self.zipcodeList.currentItem()
-        if not zip_item:
+        zipcode = self._selected_zipcode()
+        if not zipcode:
             self.set_status("Please select a zipcode first.")
             return
-        zipcode = zip_item.text()
     
         if self.selected_category:
             rows = run_query(
@@ -161,15 +206,80 @@ class BusinessSearchApp(QWidget):
                 (zipcode,),
             )
     
-        #returns results
-        self.resultsTable.setRowCount(len(rows))
-        for row_idx, row_data in enumerate(rows):
-            for col_idx, value in enumerate(row_data):
-                self.resultsTable.setItem(row_idx, col_idx, QTableWidgetItem(str(value)))
-        self.resultsTable.resizeColumnsToContents()
+        self._populate_table(self.resultsTable, rows)
  
         self.set_status(f"Found {len(rows)} businesses.") #change status after search 
- 
+
+    def popular_businesses(self):
+        zipcode = self._selected_zipcode()
+
+
+        if not zipcode:
+            self.set_status("No zipcode selected...")
+            return
+
+        rows = run_query( #query to find popular businesses within given zip 
+            """
+            SELECT b.name, b.totalCheckins, b.reviewCount
+            FROM Business b
+            JOIN Address a ON b.addressID = a.addressID
+            WHERE a.zipcode = %s AND b.popularityStatus = TRUE
+            ORDER BY b.name;
+            """,
+            (zipcode,),
+        )
+
+        self._populate_table(self.popularResults, rows)
+        self.set_status(f"Found {len(rows)} popular businesses.")
+
+    def successful_businesses(self):
+        zipcode = self._selected_zipcode()
+
+        if not zipcode:
+            self.set_status("No zipcode selected...")
+            return
+
+        rows = run_query(
+            """
+            SELECT b.name, b.averageReviewRating
+            FROM Business b
+            JOIN Address a ON b.addressID = a.addressID
+            WHERE a.zipcode = %s AND b.successStatus = TRUE
+            ORDER BY b.name;
+            """,
+            (zipcode,),
+        )
+        self._populate_table(self.successfulResults, rows)
+        self.set_status(f"Found {len(rows)} successful businesses.")
+
+    def refresh_results(self):
+        zipcode = self._selected_zipcode()
+        if not zipcode:
+            self.set_status("No zipcode selected...")
+            return
+
+        self.search_businesses()
+        self.popular_businesses()
+        self.successful_businesses()
+
+        stats_rows = run_query(
+            """
+            SELECT 'Businesses in zipcode', COALESCE(MAX(z.businessCount)::text, 'N/A')
+            FROM Zipcode z
+            WHERE z.zipcode = %s
+            UNION ALL
+            SELECT 'Population', COALESCE(MAX(z.population)::text, 'N/A')
+            FROM Zipcode z
+            WHERE z.zipcode = %s
+            UNION ALL
+            SELECT 'Average Income', COALESCE(MAX(z.averageIncome)::text, 'N/A')
+            FROM Zipcode z
+            WHERE z.zipcode = %s;
+            """,
+            (zipcode, zipcode, zipcode),
+        )
+        self._populate_table(self.zipcodeResults, stats_rows)
+
 
 if __name__ == "__main__": 
     app = QApplication([])

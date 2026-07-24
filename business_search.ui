@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="columnCount">
-    <number>12</number>
+    <number>6</number>
    </property>
    <column>
     <property name="text">
@@ -55,20 +55,14 @@
      <string>Checkins</string>
     </property>
    </column>
-   <column/>
-   <column/>
-   <column/>
-   <column/>
-   <column/>
-   <column/>
   </widget>
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>9</x>
-     <y>9</y>
-     <width>781</width>
-     <height>111</height>
+     <x>10</x>
+     <y>20</y>
+     <width>591</width>
+     <height>91</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
@@ -99,8 +93,8 @@
         <rect>
          <x>0</x>
          <y>20</y>
-         <width>191</width>
-         <height>91</height>
+         <width>141</width>
+         <height>71</height>
         </rect>
        </property>
       </widget>
@@ -116,8 +110,8 @@
         <rect>
          <x>0</x>
          <y>20</y>
-         <width>191</width>
-         <height>91</height>
+         <width>141</width>
+         <height>71</height>
         </rect>
        </property>
       </widget>
@@ -133,8 +127,8 @@
         <rect>
          <x>0</x>
          <y>20</y>
-         <width>191</width>
-         <height>91</height>
+         <width>141</width>
+         <height>71</height>
         </rect>
        </property>
       </widget>
@@ -167,6 +161,128 @@
      </widget>
     </item>
    </layout>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_5">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>410</y>
+     <width>251</width>
+     <height>111</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Zipcode Statistics</string>
+   </property>
+   <widget class="QTableWidget" name="zipcodeResults">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>20</y>
+      <width>256</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <row>
+     <property name="text">
+      <string># Businesses</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Population</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Average Income</string>
+     </property>
+    </row>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_6">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>390</y>
+     <width>301</width>
+     <height>261</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Popular Businesses</string>
+   </property>
+   <widget class="QTableWidget" name="popularResults">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>20</y>
+      <width>301</width>
+      <height>241</height>
+     </rect>
+    </property>
+    <column>
+     <property name="text">
+      <string>Business Name</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Total Check-Ins</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Review Count</string>
+     </property>
+    </column>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_7">
+   <property name="geometry">
+    <rect>
+     <x>650</x>
+     <y>390</y>
+     <width>201</width>
+     <height>261</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Successful Businesses</string>
+   </property>
+   <widget class="QTableWidget" name="successfulResults">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>20</y>
+      <width>201</width>
+      <height>241</height>
+     </rect>
+    </property>
+    <column>
+     <property name="text">
+      <string>Business Name</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Rating</string>
+     </property>
+    </column>
+   </widget>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>530</y>
+     <width>101</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Refresh Results</string>
+   </property>
   </widget>
  </widget>
  <resources/>

@@ -84,9 +84,9 @@ CREATE TABLE CheckIn (
 
 ---- query to determine if a business is popular, follows classificationMetrics.pdf
 
-SELECT businessID, totalCheckins, reviewCount, averageReviewRating,
+SELECT businessID, totalCheckins, reviewCount,
     CASE 
-        WHEN totalCheckins > 1000 AND reviewCount > 100 THEN TRUE
+        WHEN totalCheckins > 100 AND reviewCount > 50 THEN TRUE
         ELSE FALSE
     END AS popularityStatus
 FROM Business;
